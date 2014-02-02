@@ -1,0 +1,9 @@
+{
+  "server": {
+    "port": "1234",
+    "name": "Merchant Front End",
+    "session": {
+      "secret": "pumpkin hammer"
+    }  
+  }
+}

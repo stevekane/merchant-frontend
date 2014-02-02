@@ -1,0 +1,26 @@
+{
+  "name": "merchant-frontend",
+  "version": "0.0.1",
+  "description": "Merchnat frontend for getting deals into the system",
+  "main": "server.js",
+  "scripts": {
+    "test": "node tests.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gihub.com:stevekane/merchant-frontend.git"
+  },
+  "keywords": [
+    "merchants",
+    "frontend"
+  ],
+  "author": "Steve Kane",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "~2.4.1",
+    "express": "~3.4.8",
+    "request": "~2.33.0",
+    "node-uuid": "~1.4.1",
+    "async": "~0.2.10"
+  }
+}
