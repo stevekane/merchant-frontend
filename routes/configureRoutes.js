@@ -2,11 +2,27 @@ var _ = require('lodash')
   , async = require('async')
   , partial = _.partial
   , pluck = _.pluck
-  , configurePersistence = require('../persistence/disk')
+  , configurePersistence = require('../persistence/stores-api')
 
 //index route handlers
 var respondToIndex = function (options, req, res) {
   res.json(200, {message: "things are looking pretty good"}); 
+};
+
+var getDeals = function (options, req, res) {
+  options.persistence.getDeals(function (err, deals) {
+    if (err) res.json(400, {message: err})
+    else res.json(200, {deals: deals})
+  });
+};
+
+var getDeal = function (options, req, res) {
+  var slug = req.params.slug || "";
+
+  options.persistence.getDeal(slug, function (err, deal) {
+    if (err) res.json(400, {message: err}) 
+    else res.json(200, {deal: deal})
+  });
 };
 
 var createDeal = function (options, req, res) {
@@ -68,6 +84,8 @@ module.exports = function (app, options) {
 
   app.get("/", partial(respondToIndex, routeOptions));
   app.post("/deals", partial(createDeal, routeOptions));
+  app.get("/deals", partial(getDeals, routeOptions));
+  app.get("/deals/:slug", partial(getDeal, routeOptions));
   app.post("/brands", partial(createBrand, routeOptions));
   app.put("/deals/:dealId", partial(updateDeal, routeOptions));
 };

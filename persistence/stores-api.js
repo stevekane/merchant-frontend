@@ -5,8 +5,8 @@ module.exports = function (app, options) {
   var logger = options.logger || console;
 
   //wraps request w/ logging and callback value normalization
-  var sendWith = function (method, options, cb) {
-    request[method](options, function (err, res, data) { 
+  var sendWith = function (options, cb) {
+    request(options, function (err, res, data) { 
       logger.log("Request sent to ", options.url);
       if (err) logger.error(err)
       else logger.log(data);
@@ -85,6 +85,8 @@ module.exports = function (app, options) {
   return {
     createDeal: createDeal,
     createBrand: createBrand,
+    getDeals: getDeals,
+    getDeal: getDeal,
     addOptionToDeal: addOptionToDeal,
     addBrandToDeal: addBrandToDeal
   };
