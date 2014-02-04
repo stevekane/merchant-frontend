@@ -14,6 +14,8 @@ module.exports = function (app, options) {
     });
   };
 
+  //CREATE
+
   //create a new deal based on a big-commerce product
   var createDeal = function (deal, cb) {
     var options = {
@@ -33,6 +35,28 @@ module.exports = function (app, options) {
     };
     sendWith(options, cb);
   };
+
+  //READ
+
+  var getDeals = function (cb) {
+    var options = {
+      method: "get",
+      url: storesHost + "brands/search",
+      json: true
+    }; 
+    sendWith(options, cb);
+  };
+
+  var getDeal = function (slug, cb) {
+    var options = {
+      method: "get",
+      url: storesHost + "brands/" + slug,
+      json: true
+    }; 
+    sendWith(options, cb);
+  };
+
+  //UPDATE
 
   /*
   add a groupon brand to an existing groupon deal.  

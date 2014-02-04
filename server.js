@@ -17,6 +17,7 @@ app
   .use(express.cookieSession({
     secret: config.server.session.secret 
   }))
+  .use(express.static(__dirname + "/public"))
   .use(express.logger())
   .use(express.urlencoded())
   .use(express.json())
