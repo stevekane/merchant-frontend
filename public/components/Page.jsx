@@ -52,13 +52,13 @@ var Page = React.createClass({
     var handler = returnMatchingHandler(this.props.route); 
 
     return(
-      <div>
-        <h1>Main Template</h1> 
-        <a href="#">Home</a>
-        <a href="#brands">Brands</a>
-        <a href="#deals">Deals</a>
-        { handler(this.props) }
-      </div>
+    <div>
+      <h1>Main Template</h1> 
+      <a href="#">Home</a>
+      <a href="#brands">Brands</a>
+      <a href="#deals">Deals</a>
+      { handler(this.props) }
+    </div>
     );
   }
 });

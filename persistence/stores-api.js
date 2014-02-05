@@ -6,7 +6,7 @@ module.exports = function (app, options) {
 
   //wraps request w/ logging and callback value normalization
   var sendWith = function (options, cb) {
-    request(options, function (err, res, data) { 
+    return request(options, function (err, res, data) { 
       logger.log("Request sent to ", options.url);
       if (err) logger.error(err)
       else logger.log(data);
@@ -23,7 +23,7 @@ module.exports = function (app, options) {
       url: storesHost + "deals",
       json: {deal: deal}
     };
-    sendWith(options, cb);
+    return sendWith(options, cb);
   };
 
   //create new brand with brand from big commerce api
@@ -33,7 +33,7 @@ module.exports = function (app, options) {
       url: storesHost + "brands",
       json: {brand: brand}
     };
-    sendWith(options, cb);
+    return sendWith(options, cb);
   };
 
   //READ
@@ -44,7 +44,7 @@ module.exports = function (app, options) {
       url: storesHost + "brands/search",
       json: true
     }; 
-    sendWith(options, cb);
+    return sendWith(options, cb);
   };
 
   var getDeal = function (slug, cb) {
@@ -53,7 +53,7 @@ module.exports = function (app, options) {
       url: storesHost + "brands/" + slug,
       json: true
     }; 
-    sendWith(options, cb);
+    return sendWith(options, cb);
   };
 
   //UPDATE
@@ -69,7 +69,7 @@ module.exports = function (app, options) {
       url: storesHost + "deals/" + dealId + "/brands/" + brandId,
       json: true,
     };
-    sendWith(options, cb);
+    return sendWith(options, cb);
   };
 
   //add an option to an existing deal
@@ -79,7 +79,7 @@ module.exports = function (app, options) {
       url: storesHost + "deals/" + dealId + "/options",
       json: {option: option}
     };
-    sendWith(options, cb);
+    return sendWith(options, cb);
   };
 
   return {

@@ -10,37 +10,22 @@ var respondToIndex = function (options, req, res) {
 };
 
 var getDeals = function (options, req, res) {
-  options.persistence.getDeals(function (err, deals) {
-    if (err) res.json(400, {message: err})
-    else res.json(200, {deals: deals})
-  });
+  options.persistence.getDeals().pipe(res);
 };
 
 var getDeal = function (options, req, res) {
   var slug = req.params.slug || "";
-
-  options.persistence.getDeal(slug, function (err, deal) {
-    if (err) res.json(400, {message: err}) 
-    else res.json(200, {deal: deal})
-  });
+  options.persistence.getDeal(slug).pipe(res);
 };
 
 var createDeal = function (options, req, res) {
   var deal = req.body || {};
-  
-  options.persistence.createDeal(deal, function (err, data) {
-    if (err) res.json(400, {message: err})
-    else res.json(200, {deal: deal})
-  });
+  options.persistence.createDeal(deal).pipe(res);
 };
 
 var createBrand = function (options, req, res) {
   var brand = req.body || {};
-
-  options.persistence.createBrand(brand, function (err, data) {
-    if (err) res.json(400, {message: err})
-    else res.json(200, {brand: brand})
-  });
+  options.persistence.createBrand(brand).pipe(res);
 };
 
 /*
