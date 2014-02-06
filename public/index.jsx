@@ -12,20 +12,26 @@ var React = require('react')
 //string for current route is application state (mutable)
 var route = ""
 
-//cached brands available on the frontend
-var brands = {};
+//cached data by type (keys are ids)
+var cache = {
+  brands: {},
+  deals: {}
+};
 
-//mutate the cache
-var fetchBrands = function (host, brands) {
-  var url = host + "/brands"
-    , brandStream = hyperquest.get(url)
-    , accumStream = AccumulateStream({key: "brands"});
+var fetchAndUpdateCache = function (url, key, cache) {
+  var fetchStream = hyperquest.get(url)
+    , accumStream = AccumulateStream({key: key});
 
-  brandStream
+  fetchStream 
   .pipe(accumStream);
 
-  accumStream.on("end", partial(updateCache, brands, {}));
+  accumStream.on("end", partial(updateCache, cache, {}));
   accumStream.on("error", bind(console.log, console));
+};
+
+var fetchData = function (host, cache) {
+  fetchAndUpdateCache(host+"/deals", "deals", cache.deals);
+  fetchAndUpdateCache(host+"/brands", "brands", cache.brands);
 };
 
 var updateRoute = function () {
@@ -33,19 +39,19 @@ var updateRoute = function () {
 };
 
 var Page = React.renderComponent(
-  <PageComponent route={route} brands={brands} />, 
+  <PageComponent route={route} cache={cache} />, 
   document.body
 );
 
 var tick = function () {
   Page.setProps({
     route: route,
-    brands: brands 
+    cache: cache
   });
   window.requestAnimationFrame(tick);
 };
 
 window.addEventListener("load", updateRoute, false);
-window.addEventListener("load", partial(fetchBrands, apiHost, brands), false);
+window.addEventListener("load", partial(fetchData, apiHost, cache), false);
 window.addEventListener("hashchange", updateRoute, false);
 window.requestAnimationFrame(tick);

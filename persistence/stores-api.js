@@ -56,6 +56,24 @@ module.exports = function (app, options) {
     return sendWith(options, cb);
   };
 
+  var getDeals = function (cb) {
+    var options = {
+      method: "get",
+      url: storesHost + "deals/search",
+      json: true
+    }; 
+    return sendWith(options, cb);
+  };
+
+  var getDeal = function (slug, cb) {
+    var options = {
+      method: "get",
+      url: storesHost + "deals/" + slug,
+      json: true
+    }; 
+    return sendWith(options, cb);
+  };
+
   //UPDATE
 
   /*
@@ -87,6 +105,8 @@ module.exports = function (app, options) {
     createBrand: createBrand,
     getBrands: getBrands,
     getBrand: getBrand,
+    getDeals: getDeals,
+    getDeal: getDeal,
     addOptionToDeal: addOptionToDeal,
     addBrandToDeal: addBrandToDeal
   };

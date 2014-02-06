@@ -10,23 +10,29 @@ var renderNotFound = function (path, props) {
   return <h2>Nothing found matching this route</h2>;
 };
 
-var renderIndex = function (path, args, props) {
-  return <h2>You are in the index</h2>;
-};
-
 var renderBrandTile = function (brand) {
   return <li key={brand.id}>{brand.name}</li>;
 };
 
-var renderBrands = function (path, args, props) {
-  return <ul>{ map(values(props.brands), renderBrandTile) }</ul>;
+var renderDealTile = function (deal) {
+  return <li key={deal.id}>{deal.title}</li>;
 };
 
-var renderProducts = function (path, args, props) {};
+var renderIndex = function (path, args, props) {
+  return <h2>You are in the index</h2>;
+};
 
-var renderProduct = function (path, args, props) {};
+var renderBrands = function (path, args, props) {
+  return <ul>{ map(values(props.cache.brands), renderBrandTile) }</ul>;
+};
 
-var renderNewProduct = function (path, args, props) {};
+var renderDeals = function (path, args, props) {
+  return <ul>{ map(values(props.cache.deals), renderDealTile) }</ul>;
+};
+
+var renderDeal = function (path, args, props) {};
+
+var renderNewDeal = function (path, args, props) {};
 
 var router = new Router
 
@@ -39,15 +45,15 @@ router.add([
 ]);
 
 router.add([
-  {path: "/products", handler: renderProducts}
+  {path: "/deals", handler: renderDeals}
 ]);
 
 router.add([
-  {path: "/products/new", handler: renderNewProduct}
+  {path: "/deals/new", handler: renderNewDeal}
 ]);
 
 router.add([
-  {path: "/products/:product_id", handler: renderProduct}
+  {path: "/deals/:deal_id", handler: renderDeal}
 ]);
 
 
@@ -69,8 +75,8 @@ var Page = React.createClass({
       <h1>Main Template</h1> 
       <a href="#">Home</a>
       <a href="#brands">Brands</a>
-      <a href="#products">Products</a>
-      <a href="#products/new">New Product</a>
+      <a href="#deals">Deals</a>
+      <a href="#deals/new">New Deal</a>
       { handler(this.props) }
     </div>
     );
