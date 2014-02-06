@@ -5,17 +5,17 @@ var React = require('react')
   , map = _.map
   , values = _.values
   , isEqual = _.isEqual
+  , BrandlistComponent = require('./Brandlist.jsx')
+  , DeallistComponent = require('./Deallist.jsx')
+  , returnMatchingHandler = require('../utils').returnMatchingHandler;
 
-var renderNotFound = function (path, props) {
-  return <h2>Nothing found matching this route</h2>;
-};
-
-var renderBrandTile = function (brand) {
-  return <li key={brand.id}>{brand.name}</li>;
-};
-
-var renderDealTile = function (deal) {
-  return <li key={deal.id}>{deal.title}</li>;
+var renderNotFound = function (props) {
+  return(
+    <h2>
+      Nothing found matching this route
+      <a href="#">Return Home</a>
+    </h2>
+  );
 };
 
 var renderIndex = function (path, args, props) {
@@ -23,18 +23,16 @@ var renderIndex = function (path, args, props) {
 };
 
 var renderBrands = function (path, args, props) {
-  return <ul>{ map(values(props.cache.brands), renderBrandTile) }</ul>;
+  return <BrandlistComponent brands={props.cache.brands} route={props.route}/>;
 };
 
 var renderDeals = function (path, args, props) {
-  return <ul>{ map(values(props.cache.deals), renderDealTile) }</ul>;
+  return <DeallistComponent deals={props.cache.deals} />;
 };
-
-var renderDeal = function (path, args, props) {};
 
 var renderNewDeal = function (path, args, props) {};
 
-var router = new Router
+var router = new Router;
 
 router.add([
   {path: "/", handler: renderIndex}
@@ -45,6 +43,10 @@ router.add([
 ]);
 
 router.add([
+  {path: "/brands/:slug", handler: renderBrands}
+]);
+
+router.add([
   {path: "/deals", handler: renderDeals}
 ]);
 
@@ -52,33 +54,19 @@ router.add([
   {path: "/deals/new", handler: renderNewDeal}
 ]);
 
-router.add([
-  {path: "/deals/:deal_id", handler: renderDeal}
-]);
-
-
-var returnMatchingHandler = function (path) {
-  var matches = router.recognize(path.replace("#", ""));
-
-  return matches
-    ? partial(matches[0].handler, path, matches[0].params)
-    : partial(renderNotFound, path);
-};
-
-
 var Page = React.createClass({
   render: function () {
-    var handler = returnMatchingHandler(this.props.route); 
+    var handler = returnMatchingHandler(router, this.props.route); 
 
     return(
-    <div>
-      <h1>Main Template</h1> 
-      <a href="#">Home</a>
-      <a href="#brands">Brands</a>
-      <a href="#deals">Deals</a>
-      <a href="#deals/new">New Deal</a>
-      { handler(this.props) }
-    </div>
+      <div>
+        <h1>Main Template</h1> 
+        <a href="#">Home</a>
+        <a href="#brands">Brands</a>
+        <a href="#deals">Deals</a>
+        <a href="#deals/new">New Deal</a>
+        { handler ? handler(this.props) : renderNotFound(this.props)}
+      </div>
     );
   }
 });

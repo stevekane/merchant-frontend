@@ -35,7 +35,7 @@ var fetchData = function (host, cache) {
 };
 
 var updateRoute = function () {
-  route = window.location.hash;
+  route = window.location.hash.replace("#", "");
 };
 
 var Page = React.renderComponent(
