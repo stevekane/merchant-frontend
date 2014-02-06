@@ -1,48 +1,51 @@
 var React = require('react')
   , hyperquest = require('hyperquest')
-  , PageComponent = require('./components/Page.jsx');
+  , _ = require('lodash')
+  , partial = _.partial
+  , bind = _.bind
+  , AccumulateStream = require('../modules/AccumulateStream')
+  , updateCache = require('../modules/mutate-cache').updateCache
+  , PageComponent = require('./components/Page.jsx')
+  , config = require('./config.json')
+  , apiHost = config.api.url
 
 //string for current route is application state (mutable)
 var route = ""
 
-//cached deals available on the frontend
-var deals = [];
+//cached brands available on the frontend
+var brands = {};
 
-var fetchData = function () {
-  var url = window.location.origin + "/deals"
-    , dealStream = hyperquest.get(url)
-    , results = "";
+//mutate the cache
+var fetchBrands = function (host, brands) {
+  var url = host + "/brands"
+    , brandStream = hyperquest.get(url)
+    , accumStream = AccumulateStream({key: "brands"});
 
-  dealStream.on("error", console.log.bind(console));
-  dealStream.on("response", function (res) {
-    res.on("data", function (chunk) {
-      results += chunk;
+  brandStream
+  .pipe(accumStream);
 
-    });
-    res.on("end", function () {
-      try {
-        deals = JSON.parse(results);
-      } catch (e) {
-        console.log(e); 
-      }
-      console.log(deals);
-    });
-  });
+  accumStream.on("end", partial(updateCache, brands, {}));
+  accumStream.on("error", bind(console.log, console));
 };
 
 var updateRoute = function () {
   route = window.location.hash;
 };
 
+var Page = React.renderComponent(
+  <PageComponent route={route} brands={brands} />, 
+  document.body
+);
+
 var tick = function () {
-  React.renderComponent(
-    <PageComponent route={route} deals={deals} />, 
-    document.body
-  );
+  Page.setProps({
+    route: route,
+    brands: brands 
+  });
   window.requestAnimationFrame(tick);
 };
 
 window.addEventListener("load", updateRoute, false);
-window.addEventListener("load", fetchData, false);
+window.addEventListener("load", partial(fetchBrands, apiHost, brands), false);
 window.addEventListener("hashchange", updateRoute, false);
 window.requestAnimationFrame(tick);

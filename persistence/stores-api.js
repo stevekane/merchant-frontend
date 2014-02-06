@@ -10,7 +10,7 @@ module.exports = function (app, options) {
       logger.log("Request sent to ", options.url);
       if (err) logger.error(err)
       else logger.log(data);
-      cb(err, data);
+      if (typeof cb === "Function") cb(err, data);
     });
   };
 
@@ -38,7 +38,7 @@ module.exports = function (app, options) {
 
   //READ
 
-  var getDeals = function (cb) {
+  var getBrands = function (cb) {
     var options = {
       method: "get",
       url: storesHost + "brands/search",
@@ -47,7 +47,7 @@ module.exports = function (app, options) {
     return sendWith(options, cb);
   };
 
-  var getDeal = function (slug, cb) {
+  var getBrand = function (slug, cb) {
     var options = {
       method: "get",
       url: storesHost + "brands/" + slug,
@@ -85,8 +85,8 @@ module.exports = function (app, options) {
   return {
     createDeal: createDeal,
     createBrand: createBrand,
-    getDeals: getDeals,
-    getDeal: getDeal,
+    getBrands: getBrands,
+    getBrand: getBrand,
     addOptionToDeal: addOptionToDeal,
     addBrandToDeal: addBrandToDeal
   };

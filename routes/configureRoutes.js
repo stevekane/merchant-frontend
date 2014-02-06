@@ -9,13 +9,13 @@ var respondToIndex = function (options, req, res) {
   res.json(200, {message: "things are looking pretty good"}); 
 };
 
-var getDeals = function (options, req, res) {
-  options.persistence.getDeals().pipe(res);
+var getBrands = function (options, req, res) {
+  options.persistence.getBrands().pipe(res);
 };
 
-var getDeal = function (options, req, res) {
+var getBrand = function (options, req, res) {
   var slug = req.params.slug || "";
-  options.persistence.getDeal(slug).pipe(res);
+  options.persistence.getBrand(slug).pipe(res);
 };
 
 var createDeal = function (options, req, res) {
@@ -69,8 +69,8 @@ module.exports = function (app, options) {
 
   app.get("/", partial(respondToIndex, routeOptions));
   app.post("/deals", partial(createDeal, routeOptions));
-  app.get("/deals", partial(getDeals, routeOptions));
-  app.get("/deals/:slug", partial(getDeal, routeOptions));
+  app.get("/brands", partial(getBrands, routeOptions));
+  app.get("/brands/:slug", partial(getBrand, routeOptions));
   app.post("/brands", partial(createBrand, routeOptions));
   app.put("/deals/:dealId", partial(updateDeal, routeOptions));
 };
